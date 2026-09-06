@@ -67,3 +67,7 @@ debugSymbols
 # Linux Building
 /AppDir
 appimage-builder-cache/
+/appimage-build/
+/.bundle.yml
+/*.AppImage
+/*.AppImage.zsync

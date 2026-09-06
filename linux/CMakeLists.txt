@@ -77,7 +77,13 @@ include(flutter/generated_plugins.cmake)
 # By default, "installing" just makes a relocatable bundle in the build
 # directory.
 set(BUILD_BUNDLE_DIR "${PROJECT_BINARY_DIR}/bundle")
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+# CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT is unreliable here: the
+# sentry_flutter plugin's vendored sentry-native.cmake FetchContent's
+# sentry-native, which calls its own project() and include(GNUInstallDirs)
+# before this point, clearing that flag even though the user never set
+# CMAKE_INSTALL_PREFIX themselves. Compare against the actual default value
+# instead, so the bundle dir override still applies.
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT OR CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
   set(CMAKE_INSTALL_PREFIX "${BUILD_BUNDLE_DIR}" CACHE PATH "..." FORCE)
 endif()
 
